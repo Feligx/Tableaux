@@ -87,6 +87,7 @@ def par_complementario(l):
 print(par_complementario(listaliterales))  
 
 T2 = Tree("Y",Tree("p",None,None),Tree("q",None,None))
+
 def es_literal(f):
 	# Esta función determina si el árbol f es un literal
 	# Input: f, una fórmula como árbol
@@ -105,7 +106,11 @@ def no_literales(l):
 	# solo literales
 	# Input: l, una lista de fórmulas como árboles
 	# Output: None/f, tal que f no es literal
-	return False
+    for f in l:
+       	if not es_literal(f):
+        	return Inorder(f)
+    return None
+
 
 T1 = Tree('O',Tree('-',None,Tree('s',None,None)),Tree('Y',Tree('t',None,None),Tree('>',Tree('u',None,None),Tree('v',None,None))))
 def Clasificacion(a): 
