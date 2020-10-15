@@ -10,7 +10,7 @@ letrasProposicionales = [chr(x) for x in range(97, 123)]
 listaInterpsVerdaderas = [] 
 # inicializa la lista de hojas
 listaHojas = []
-
+ 
 #ConectivosBinarios = ["Y","O",">","<->"]
 
 ##############################################################################
@@ -87,7 +87,6 @@ def par_complementario(l):
 print(par_complementario(listaliterales))  
 
 T2 = Tree("Y",Tree("p",None,None),Tree("q",None,None))
-
 def es_literal(f):
 	# Esta función determina si el árbol f es un literal
 	# Input: f, una fórmula como árbol
@@ -101,6 +100,7 @@ def es_literal(f):
 
 print(es_literal(T2)) 
 
+M = [Tree('q',None,None),Tree('-',None,Tree('p',None,None)),Tree('-',None,Tree('-',None,Tree('p',None,None))),Tree('-',None,Tree('q',None,None))]
 def no_literales(l):
 	# Esta función determina si una lista de fórmulas contiene
 	# solo literales
@@ -108,8 +108,11 @@ def no_literales(l):
 	# Output: None/f, tal que f no es literal
     for f in l:
        	if not es_literal(f):
-        	return Inorder(f)
-    return None
+        	return "No todos son literales: " + Inorder(f)
+    return "None: Solo hay literales" 
+    #return None
+
+print(no_literales(M)) 
 
 
 T1 = Tree('O',Tree('-',None,Tree('s',None,None)),Tree('Y',Tree('t',None,None),Tree('>',Tree('u',None,None),Tree('v',None,None))))
@@ -156,4 +159,4 @@ def Tableaux(f):
 	A = String2Tree(f)
 	listaHojas = [[A]]
 
-	return listaInterpsVerdaderas
+	return listaInterpsVerdaderas 
