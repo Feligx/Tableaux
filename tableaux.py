@@ -140,13 +140,77 @@ def Clasificacion(a):
 
 print(Clasificacion(T1))
             
-def clasifica_y_extiende(f):
+def clasifica_y_extiende(f,h):
 	# clasifica una fórmula como alfa o beta y extiende listaHojas
 	# de acuerdo a la regla respectiva
 	# Input: f, una fórmula como árbol
 	# Output: no tiene output, pues modifica la variable global listaHojas
 	global listaHojas
-
+	print("Formula: ", Inorder(f))
+	print("Hoja: ", imprime_hoja(h))
+	
+	#assert(f in h), "La formula no esta en la lista!"
+	
+	clase= clasificación(f)
+    	print("Clasificada como: ", clase)
+    	assert(clase != None), "Formula incorrecta" + imprime_hoja(h)
+    
+    	if clase == '1-Alfa':
+        	aux = [x for x in h]
+        	listaHojas.remove(h)
+        	aux.remove(f)
+        	aux += [f.right.right]
+        	listaHojas.append(aux)
+    	elif clase == '2-Alfa':
+        	aux = [x for x in h]
+        	listaHojas.remove(h)
+        	aux.remove(f)
+        	aux +=[f.left]
+        	aux +=[f.right]
+        	listaHojas.append(aux)
+    	elif clase == '3-Alfa':
+	        aux = [x for x in h]
+	        listaHojas.remove(h)
+	        aux.remove(f)
+        	aux+= [Tree('-',None,f.right.right)]
+	        aux+= [Tree('-',None,f.right.left)]
+	        listaHojas.append(aux)
+    	elif clase == '4-Alfa':
+	        aux = [x for x in h]
+	        listaHojas.remove(h)
+        	aux.remove(f)
+	        aux+= [f.right.left]
+        	aux+= [Tree('-',None,f.right.right)]
+        	listaHojas.append(aux)
+    	elif clase == '1-Beta':
+	        aux = [x for x in h]
+	        aux2= [x for x in h]
+	        listaHojas.remove(h)
+	        aux.remove(f)
+        	aux2.remove(f)
+        	aux+= [Tree('-',None,f.right.left)]
+        	aux2+= [Tree('-',None,f.right.right)]
+        	listaHojas.append(aux)
+        	listaHojas.append(aux2)
+    	elif clase == '2-Beta':
+	        aux = [x for x in h]
+	        aux2 = [x for x in h]
+	        listaHojas.remove(h)
+        	aux.remove(f)
+        	aux2.remove(f)
+        	aux+= [f.left]
+        	aux2+= [f.right]
+        	listaHojas.append(aux)
+        	listaHojas.append(aux2)
+    	elif clase == '3-Beta':
+	        aux = [x for x in h]
+	        aux2 = [x for x in h]
+	        listaHojas.remove(h)
+	        aux.remove(f)
+	        aux2.remove(f)
+	        aux+= [Tree('-',None,f.left)]
+	        aux2+= [f.right]
+		
 def Tableaux(f):
 
 	# Algoritmo de creacion de tableau a partir de lista_hojas
