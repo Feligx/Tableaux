@@ -1,5 +1,5 @@
 #-*-coding: utf-8-*-
-from random import choice
+from random import choice 
 ##############################################################################
 # Variables globales
 ##############################################################################
@@ -7,9 +7,11 @@ from random import choice
 # Crea las letras minúsculas a-z
 letrasProposicionales = [chr(x) for x in range(97, 123)]
 # inicializa la lista de interpretaciones
-listaInterpsVerdaderas = []
+listaInterpsVerdaderas = [] 
 # inicializa la lista de hojas
 listaHojas = []
+
+#ConectivosBinarios = ["Y","O",">","<->"]
 
 ##############################################################################
 # Definición de objeto tree y funciones de árboles
@@ -17,7 +19,7 @@ listaHojas = []
 
 class Tree(object):
 	def __init__(self, label, left, right):
-		self.left = left
+		self.left = left 
 		self.right = right
 		self.label = label
 
@@ -32,7 +34,7 @@ def Inorder(f):
 	else:
 		return "(" + Inorder(f.left) + f.label + Inorder(f.right) + ")"
 
-def StringtoTree(A):
+def String2Tree(A):
     # Crea una formula como tree dada una formula como cadena escrita en notacion polaca inversa
     # Input: A, lista de caracteres con una formula escrita en notacion polaca inversa
              # letrasProposicionales, lista de letras proposicionales
@@ -58,15 +60,33 @@ def imprime_hoja(H):
 		cadena += Inorder(f)
 	return cadena + "}"
 
- 
+P = '-q' 
+
+def complemento(l):
+    if len(l) == 1 or len(l)==2:
+        if (l[0]=='-' and l[1] != '-'):
+            return Inorder(Tree(l[1],None,None))
+        elif (l[0] != '-' and len(l)==1):
+            return Inorder(Tree('-',None,Tree(l[0],None,None)))
+    
+print(complemento(P))   
+
+listaliterales=['p','-p','r','-s','s'] 
 
 def par_complementario(l):
 	# Esta función determina si una lista de solo literales
 	# contiene un par complementario
 	# Input: l, una lista de literales
 	# Output: True/False
-	return False
+    for i in range(0,len(l)):
+        for j in range(1,len(l)):
+            if l[i]==complemento(l[j]):
+                return True 
+    return False 
+        
+print(par_complementario(listaliterales))  
 
+T2 = Tree("Y",Tree("p",None,None),Tree("q",None,None))
 def es_literal(f):
 	# Esta función determina si el árbol f es un literal
 	# Input: f, una fórmula como árbol
@@ -78,6 +98,8 @@ def es_literal(f):
     else:
         return False
 
+print(es_literal(T2)) 
+
 def no_literales(l):
 	# Esta función determina si una lista de fórmulas contiene
 	# solo literales
@@ -85,6 +107,31 @@ def no_literales(l):
 	# Output: None/f, tal que f no es literal
 	return False
 
+T1 = Tree('O',Tree('-',None,Tree('s',None,None)),Tree('Y',Tree('t',None,None),Tree('>',Tree('u',None,None),Tree('v',None,None))))
+def Clasificacion(a): 
+    if a.label=="-":
+        if (a.right).label=="-":
+            return "1-Alfa"
+        elif (a.right).label=="O":
+            return "3-Alfa"
+        elif (a.right).label==">":
+            return "4-Alfa"
+        elif (a.right).label =="Y":
+            return "1-Beta"
+        else:
+            return "Error en la clasificación"
+    else:
+        if a.label=="Y":
+            return "2-Alfa"
+        elif a.label == "O": 
+            return "2-Beta"
+        elif a.label==">":
+            return "3-Beta" 
+        else:
+            return "Error en la clasificación"
+
+print(Clasificacion(T1))
+            
 def clasifica_y_extiende(f):
 	# clasifica una fórmula como alfa o beta y extiende listaHojas
 	# de acuerdo a la regla respectiva
@@ -101,11 +148,7 @@ def Tableaux(f):
 	global listaHojas
 	global listaInterpsVerdaderas
 
-	A = string2Tree(f)
+	A = String2Tree(f)
 	listaHojas = [[A]]
 
 	return listaInterpsVerdaderas
-
-
-A=Tree('alpha',None,None)
-print(es_literal(A))
