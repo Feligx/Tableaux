@@ -56,8 +56,26 @@ def String2Tree(A):
             del pila[-1]
             del pila[-1]
             pila.append(formulaAux)
+	else:
+            print(u"Hay un problema: el símbolo"+str(c)+"no se reconoce")
     return pila[-1]
 
+def Inorder2Tree(A):
+	if len(A) == 1:
+		return Tree(A[0], None, None)
+	elif A[0] == '-':
+		return Tree(A[0], None, Inorder2Tree(A[1:]))
+	elif A[0] == "(":
+		counter = 0 #Contador de parentesis
+		for i in range(1, len(A)):
+			if A[i] == "(":
+				counter += 1
+			elif A[i] == ")":
+				counter -=1
+			elif (A[i] in ['Y', 'O', '>', '=']) and (counter == 0):
+				return Tree(A[i], Inorder2Tree(A[1:i]), Inorder2Tree(A[i + 1:-1]))
+	else:
+		return -1
 ##############################################################################
 # Definición de funciones de tableaux
 ##############################################################################
@@ -72,8 +90,6 @@ def imprime_hoja(H):
 			cadena += ", "
 		cadena += Inorder(f)
 	return cadena + "}"
-
-P = '-q' 
 
 def complemento(l):
     if len(l) == 1 or len(l)==2:
@@ -97,9 +113,6 @@ def par_complementario(l):
                 return True 
     return False 
         
-print(par_complementario(listaliterales))  
-
-T2 = Tree("Y",Tree("p",None,None),Tree("q",None,None))
 def es_literal(f):
 	# Esta función determina si el árbol f es un literal
 	# Input: f, una fórmula como árbol
@@ -111,9 +124,6 @@ def es_literal(f):
     else:
         return False
 
-print(es_literal(T2)) 
-
-M = [Tree('q',None,None),Tree('-',None,Tree('p',None,None)),Tree('-',None,Tree('-',None,Tree('p',None,None))),Tree('-',None,Tree('q',None,None))]
 def no_literales(l):
 	# Esta función determina si una lista de fórmulas contiene
 	# solo literales
@@ -122,13 +132,8 @@ def no_literales(l):
     for f in l:
        	if not es_literal(f):
         	return "No todos son literales: " + Inorder(f)
-    return "None: Solo hay literales" 
-    #return None
+    return None
 
-print(no_literales(M)) 
-
-
-T1 = Tree('O',Tree('-',None,Tree('s',None,None)),Tree('Y',Tree('t',None,None),Tree('>',Tree('u',None,None),Tree('v',None,None))))
 def Clasificacion(a): 
     if a.label=="-":
         if (a.right).label=="-":
@@ -150,8 +155,6 @@ def Clasificacion(a):
             return "3-Beta" 
         else:
             return "Error en la clasificación"
-
-print(Clasificacion(T1))
             
 def clasifica_y_extiende(f,h):
 	# clasifica una fórmula como alfa o beta y extiende listaHojas
@@ -162,7 +165,7 @@ def clasifica_y_extiende(f,h):
 	print("Formula: ", Inorder(f))
 	print("Hoja: ", imprime_hoja(h))
 	
-	#assert(f in h), "La formula no esta en la lista!"
+	assert(f in h), "La formula no esta en la lista!"
 	
 	clase= clasificación(f)
     	print("Clasificada como: ", clase)
@@ -234,6 +237,21 @@ def Tableaux(f):
 	global listaInterpsVerdaderas
 
 	A = String2Tree(f)
+	
+	print(u'La fórmula introducida es:\n', Inorder(A))
+
 	listaHojas = [[A]]
+    	while (len(listaHojas) > 0):
+        	h = choice(listaHojas)
+        	print("Trabajando con hoja:\n", imprime_hoja(h))
+       		x = no_literales(h)
+        	if x == None:
+            		if par_complementario(h):
+                		listaHojas.remove(h)
+            		else:
+		                listaInterpsVerdaderas.append(h)
+                		listaHojas.remove(h)
+        	else:
+            		clasifica_y_extiende(x, h)
 
 	return listaInterpsVerdaderas 
