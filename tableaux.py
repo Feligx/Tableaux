@@ -135,7 +135,7 @@ def no_literales(l):
 	# Output: None/f, tal que f no es literal
     for f in l:
        	if not es_literal(f):
-        	return "No todos son literales: " + Inorder(f)
+        	return f
     return None
 
 def Clasificacion(a): 
